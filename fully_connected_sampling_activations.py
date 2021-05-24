@@ -9,6 +9,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import metrics
 
+"""This uses variational inference with the local reparametrization trick to sample the activations
+(without variational dropout) of a fully connected neural network with 2 hidden layers. 
+The priors for the activations are N(0,1), and the variational posterior is also Gaussian as per the paper 
+https://arxiv.org/abs/1506.02557"""
+
+
 root = './'
 
 config = {
