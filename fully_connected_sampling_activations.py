@@ -81,15 +81,12 @@ class BayesianLayer(nn.Module):
         prior_activation_mu = torch.zeros((config['batch_size'],m),device = device) #prior is N(0,1)
         prior_activation_sigma = torch.zeros((config['batch_size'],m),device = device) + 1
         self.prior = Gaussian(prior_activation_mu,prior_activation_sigma) 
-        self.log_prior = 0
-        self.log_variational_posterior = 0 
         
     def forward(self,x):
         phi = torch.matmul(x,self.mu) #these are eq(6) from Kingma et al 
         delta = torch.matmul(x**2,self.sigma**2)
         Activation = Gaussian(phi,delta)
         activations = Activation.sample()
-        
         self.log_prior = self.prior.log_prob(activations) 
         self.log_variational_posterior = Activation.log_prob(activations)
         return activations
