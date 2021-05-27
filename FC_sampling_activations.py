@@ -12,7 +12,7 @@ import math
 import time
 
 """Uses variational inference with the local reparametrization trick to sample the activations
-(without variational dropout) of a fully connected neural network with 2 hidden layers. 
+(without variational dropout) of a fully connected neural network with 2 hidden layers, on the MNIST digists dataset. 
 Uses one sample to estimate the ELBO loss, and model ensembling at validation time
 Activation priors are independent N(0,1) and Variational posteriors are also Gaussian as per the paper
 https://arxiv.org/abs/1506.02557"""
