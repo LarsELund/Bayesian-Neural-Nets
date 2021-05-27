@@ -56,7 +56,7 @@ val_loader = torch.utils.data.DataLoader(
 
 
 
-def parameter_init(low,high,size,distribution):
+def parameter_init(low,high,size):
     #used to initialize the parameters, random uniform
     random_init = (low - high) * torch.rand(size = size,device = device) + high
     return random_init  
@@ -69,8 +69,8 @@ def normal_log_prob(mu,sigma,w):
 class BayesianLayer(nn.Module):
     def __init__(self,n,m): #n is size of input, m output from layer
         super().__init__()
-        self.mu = nn.Parameter(parameter_init(-0.1,0.1,(n,m),'uniform')) 
-        self.sigma = nn.Parameter(parameter_init(0.01,0.02,(n,m),'uniform'))
+        self.mu = nn.Parameter(parameter_init(-0.1,0.1,(n,m))) 
+        self.sigma = nn.Parameter(parameter_init(0.01,0.02,(n,m)))
         prior_mu = torch.zeros((config['batch_size'],m),device = device) #prior is N(0,1)
         prior_sigma = torch.zeros((config['batch_size'],m),device = device) + 1
         self.prior = prior_mu , prior_sigma
