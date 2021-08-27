@@ -124,7 +124,7 @@ def loss_fn(prediction,target,model):
          log_prior += laplace_log_prob(layer.prior_b_loc,layer.prior_b_scale,layer.Bias)
      
      negative_log_lik = F.nll_loss(prediction, target,reduction = 'sum') 
-     loss = (log_posterior - log_prior)/num_batches + negative_log_lik*num_batches
+     loss = (log_posterior - log_prior)/num_batches + negative_log_lik
      return loss
     
 model = BNN()
