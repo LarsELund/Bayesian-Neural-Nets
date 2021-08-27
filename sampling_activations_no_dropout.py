@@ -117,7 +117,7 @@ def loss_fn(prediction,target,model):
          div = KL_divergence(layer.mu,layer.sigma,layer.prior_mu,layer.prior_sigma)
          KL += div
      negative_log_lik = F.nll_loss(prediction, target,reduction = 'sum') 
-     loss = KL/num_batches + negative_log_lik*num_batches
+     loss = KL/num_batches + negative_log_lik
      return loss
 
 
