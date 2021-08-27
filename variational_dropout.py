@@ -102,7 +102,7 @@ def loss_fn(prediction,target,model):
              KL += (0.5*torch.log(a)+c1*a+c2*a**2+c3*a**3).sum()
      
      negative_log_lik = F.nll_loss(prediction, target,reduction = 'sum') 
-     loss = KL/num_batches + negative_log_lik*num_batches
+     loss = KL/num_batches + negative_log_lik
      return loss
 
 
