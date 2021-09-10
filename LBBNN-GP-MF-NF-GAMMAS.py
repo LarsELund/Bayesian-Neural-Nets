@@ -225,8 +225,8 @@ class BayesianLinear(nn.Module):
         
         if cgamma.dtype is torch.float32: #if not, it's TRUE or FALSE and can not run through the flow
             z0 = cgamma 
-            z_new,gamma_logdet = propagate_flows(cgamma.flatten(),self.gamma_flow)
-            cgamma = z_new.reshape(z0.shape)
+            z_k,gamma_logdet = propagate_flows(cgamma.flatten(),self.gamma_flow)
+            cgamma = z_k.reshape(z0.shape)
         if self.training or sample:
             self.gammas = cgamma
             weight = cgamma * self.weight.rsample()
