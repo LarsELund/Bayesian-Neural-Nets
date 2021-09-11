@@ -4,26 +4,11 @@
 import torch
 import torch.nn as nn
 
-config = {
-          'num_classes':10,  
-          'batch_size': 100,
-          'use_cuda': False,      #True=use Nvidia GPU | False use CPU
-          'log_interval': 100,     #How often to display (batch) loss during training
-          'epochs': 50,    
-          'num_test_ensemble_samples': 10,
-          'lr': 1e-4
-         }
-
-if config['use_cuda']:
-    device = 'cuda'
-else:
-    device = 'cpu'
-    
-
+DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 def parameter_init(low,high,size):
     #used to initialize the parameters, random uniform
-    random_init = (low - high) * torch.rand(size,device = device) + high
+    random_init = (low - high) * torch.rand(size,device = DEVICE) + high
     return random_init  
 
 class PropagateFlows(nn.Module):
