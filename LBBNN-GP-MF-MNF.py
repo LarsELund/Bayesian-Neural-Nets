@@ -211,23 +211,23 @@ class BayesianLinear(nn.Module):
             W_mean = z2 * self.weight.mu * self.alpha_q
             W_var = self.weight.sigma ** 2 * self.alpha_q ** 2
             log_q0 =(-0.5*torch.log(torch.tensor(math.pi)) -0.5*self.q0_log_var
-                   - 0.5*((self.z -self.q0_mean)**2/self.q0_log_var.exp())).sum()
+                   - 0.5*((self.z -self.q0_mean)**2/self.q0_log_var.exp())).sum() # N(z0;q0_mu,q0_sigma)
             log_q = -log_det_q + log_q0
             act_mu = self.r0_c @ W_mean.T
             act_var = self.r0_c ** 2 @ W_var.T
-            act_inner = act_mu + act_var.sqrt() * torch.randn_like(act_var) # LRT
+            act_inner = act_mu + act_var.sqrt() * torch.randn_like(act_var) # LRT 
             act = torch.tanh(act_inner)
             mean_r = self.r0_b1.outer(act).mean(-1)  # eq (9) from MNF paper
             log_var_r = self.r0_b2.outer(act).mean(-1)  # eq (10) from MNF paper
             z_b, log_det_r = self.r_flow(z2) # z_k - > z_b
-            log_rb = (-0.5 * torch.log(torch.tensor(math.pi)) - 0.5 * log_var_r
+            log_rb = (-0.5 * torch.log(torch.tensor(math.pi)) - 0.5 * log_var_r  # N(z_b;mu_r,sigma_r)
                    - 0.5*((z_b[-1] - mean_r)**2/log_var_r.exp())).sum()
             log_r = log_det_r + log_rb
 
-            kl_bias = (torch.log(self.bias_sigma_prior / self.bias.sigma) - 0.5 + (self.bias.sigma ** 2
+            kl_bias = (torch.log(self.bias_sigma_prior / self.bias.sigma) - 0.5 + (self.bias.sigma ** 2  
                     + (self.bias.mu - self.bias_mu_prior) ** 2) / (2 * self.bias_sigma_prior ** 2)).sum()
 
-            kl_weight = (self.alpha_q * (torch.log(self.sigma_prior / self.weight.sigma)
+            kl_weight = (self.alpha_q * (torch.log(self.sigma_prior / self.weight.sigma) 
                     - 0.5 + torch.log(self.alpha_q / self.alpha_prior)
                     + (self.weight.sigma ** 2 + (self.weight.mu*z2 - self.mu_prior) ** 2) / (2 * self.sigma_prior ** 2))
                     + (1 - self.alpha_q) * torch.log((1 - self.alpha_q) / (1 - self.alpha_prior))).sum()
