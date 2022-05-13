@@ -172,7 +172,7 @@ class BayesianLinear(nn.Module):
             e_b = torch.mm(input,e_w.T) + self.bias.mu
             var_b = torch.mm(input **2,var_w.T) + self.bias.sigma**2
             eps = torch.randn(size = (e_b.size()),device = DEVICE)
-            activations = e_b + torch.sqrt(var_b) * eps # eq (7.4)
+            activations = e_b + torch.sqrt(var_b) * eps # eq 4.3
 
         else:
             e_w = self.weight.mu * self.alpha_q
@@ -181,11 +181,11 @@ class BayesianLinear(nn.Module):
 
         if self.training or calculate_log_probs:
 
-            # eq 7.4
+            # eq 4.5
             kl_bias = (torch.log(self.bias_sigma_prior / self.bias.sigma) - 0.5 + (self.bias.sigma**2
             + (self.bias.mu-self.bias_mu_prior)**2) / (2*self.bias_sigma_prior**2)).sum()
 
-            # eq 7.3
+            # eq 4.4
             kl_weight = (self.alpha_q * (torch.log(self.sigma_prior / self.weight.sigma)
                         - 0.5 + torch.log(self.alpha_q / self.alpha_prior)
                         + (self.weight.sigma**2 + (self.weight.mu-self.mu_prior)**2)/(2*self.sigma_prior**2))
